@@ -1,5 +1,6 @@
 package yyl.yincloud.publics;
 
+import android.Manifest;
 import android.os.Environment;
 
 import java.io.File;
@@ -14,6 +15,27 @@ public class YinCloudValues {
      * 应用名
      **/
     public final static String APP_NAME = "yincloud";
+
+    //访问相机所需权限
+    public static final String[] CAMERA = new String[]{Manifest.permission.CAMERA};
+    //访问麦克风所需权限
+    public static final String[] MICROPHONE = new String[]{Manifest.permission.RECORD_AUDIO};
+    //访问储存所需权限
+    public static final String[] STORAGE = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    public static final String[] PHONE_STATE = new String[]{
+            Manifest.permission.READ_PHONE_STATE};
+
+    public static final String[] PHONE_AND_STORAGE = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
+    public static final int DoSomething_CAMERA_OR_MICROPHONE = 1111000030; //请求相机或麦克风权限
 
     /**
      * SD卡路径

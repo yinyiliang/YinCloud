@@ -23,22 +23,22 @@ public class CloudLoad extends ObjectLoader {
     }
 
     //正在售票
-    public Observable<JSONObject> findSellingTickets(int locationId) {
+    public Observable<JSONObject> findSellingTickets(String locationId) {
         return observe(apiService.findSellingTickets(locationId));
     }
 
     //正在热映
-    public Observable<JSONObject> findIsRehearsing(int locationId) {
+    public Observable<JSONObject> findIsRehearsing(String locationId) {
         return observe(apiService.findIsRehearsing(locationId));
     }
 
     //即将上映
-    public Observable<JSONObject> findComingSoon(int locationId) {
+    public Observable<JSONObject> findComingSoon(String locationId) {
         return observe(apiService.findComingSoon(locationId));
     }
 
     //影片详情 使用TICKET_URL_TYPE
-    public Observable<JSONObject> findMovieDetail(int locationId, String movieId) {
+    public Observable<JSONObject> findMovieDetail(String locationId, String movieId) {
         return observe(apiService.findMovieDetail(locationId, movieId));
     }
 

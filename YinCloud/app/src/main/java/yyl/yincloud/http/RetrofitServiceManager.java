@@ -49,7 +49,7 @@ public class RetrofitServiceManager {
 
                     mOkHttpClient = new OkHttpClient.Builder()
                             .retryOnConnectionFailure(true)
-                            .addInterceptor(mLoggingInterceptor)
+//                            .addInterceptor(mLoggingInterceptor)
                             .connectTimeout(30, TimeUnit.SECONDS)
                             .writeTimeout(DEFAULT_READ_TIME_OUT, TimeUnit.SECONDS)
                             .readTimeout(DEFAULT_READ_TIME_OUT, TimeUnit.SECONDS)

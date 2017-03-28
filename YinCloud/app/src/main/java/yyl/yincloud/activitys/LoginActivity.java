@@ -24,10 +24,17 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.google.gson.reflect.TypeToken;
+import com.jackie.greendao.CityInfoBeanDao;
+import com.jackie.greendao.DaoSession;
 import com.orhanobut.logger.Logger;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -35,8 +42,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import yyl.yincloud.R;
 import yyl.yincloud.base.BaseActivity;
+import yyl.yincloud.base.BaseApplication;
+import yyl.yincloud.bean.cityid.CityInfoBean;
 import yyl.yincloud.helpers.RenderScriptHelper;
-import yyl.yincloud.widget.OkButton;
+import yyl.yincloud.http.CustomSubscriber;
+import yyl.yincloud.publics.YinCloudValues;
+import yyl.yincloud.widget.LoginButton;
 
 /**
  * Created by yyl on 2017/3/20.
@@ -45,7 +56,7 @@ import yyl.yincloud.widget.OkButton;
 public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.btn_login)
-    OkButton btn_login;
+    LoginButton btn_login;
     @BindView(R.id.login_content)
     RelativeLayout login_content;
     @BindView(R.id.img_login_bg)
@@ -72,19 +83,52 @@ public class LoginActivity extends BaseActivity {
             R.drawable.meinv
     };
 
+    private CityInfoBeanDao mCityInfoBeanDao;
+
+    @Override
+    protected void setLayout() {
+        setContentView(R.layout.activity_login);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
 
+    }
+
+    @Override
+    protected void initListener() {
+
+    }
+
+    private void findCity() {
+        mCloudLoad.findCityId()
+                .subscribe(new CustomSubscriber<JSONObject>(
+                        YinCloudValues.CITY_ID,this));
+    }
+
+    @Override
+    protected void initData() {
         Random r = new Random(SystemClock.elapsedRealtime());
         Bitmap myBitmap = BitmapFactory.decodeResource(getResources(),
                 SPLASH_ARRAY[r.nextInt(SPLASH_ARRAY.length)]);
         img_login_bg.setImageBitmap(RenderScriptHelper.rsBlur(this, myBitmap, 14));
+
+        DaoSession daoSession = ((BaseApplication)getApplication()).getDaoSession();
+        mCityInfoBeanDao = daoSession.getCityInfoBeanDao();
+
+        findCity();
+    }
+
+    @Override
+    protected void initUi() {
+        // 缺少权限时, 进入权限配置页面
+        if (mChecker.lacksPermissions(YinCloudValues.PHONE_AND_STORAGE)) {
+            checkPermissions(YinCloudValues.PHONE_AND_STORAGE, "MainActivity");
+        }
     }
 
 
@@ -93,7 +137,7 @@ public class LoginActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.btn_login:
                 if (btn_login.isRuning()) {
-                    btn_login.setState(OkButton.STATUS_SUCCESS);
+                    btn_login.setState(LoginButton.STATUS_SUCCESS);
                 } else {
                     btn_login.startOk();
                     new Handler().postDelayed(new Runnable(){
@@ -102,7 +146,7 @@ public class LoginActivity extends BaseActivity {
 
                         }
 
-                    }, 1000);
+                    }, 500);
                 }
                 break;
         }
@@ -145,11 +189,29 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void onNext(JSONObject jsonObject, String method) {
+        switch (method) {
+            case YinCloudValues.CITY_ID:
+                JSONArray cityArray = jsonObject.optJSONArray("p");
+                Type cityToken = new TypeToken<List<CityInfoBean>>(){}.getType();
+                List<CityInfoBean> mCitys = mGson.fromJson(cityArray.toString(),cityToken);
+
+                List<CityInfoBean> cityFromDB = mCityInfoBeanDao.queryBuilder().list();
+
+                for (CityInfoBean mCity : mCitys) {
+                    if (cityFromDB.isEmpty()) {
+                        mCityInfoBeanDao.insert(mCity);
+                    } else {
+                        mCityInfoBeanDao.insertOrReplace(mCity);
+                    }
+                }
+
+                break;
+        }
 
     }
 
     @Override
     public void OnError(Throwable e) {
-
+        e.printStackTrace();
     }
 }

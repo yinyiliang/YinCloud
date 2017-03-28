@@ -1,6 +1,10 @@
 package yyl.yincloud.bean.cityid;
 
-import java.util.List;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.NotNull;
 
 /**
  * Created by yyl on 2017/3/9.
@@ -8,6 +12,7 @@ import java.util.List;
  * 城市信息
  */
 
+@Entity
 public class CityInfoBean {
     /**
      * count : 230
@@ -17,49 +22,53 @@ public class CityInfoBean {
      * pinyinShort : sh
      */
 
-    private int count;
-    private int id;
+    @Id
+    private String count;
+    private String id;
     private String n;
     private String pinyinFull;
     private String pinyinShort;
-
-    public int getCount() {
-        return count;
+    @Generated(hash = 868380019)
+    public CityInfoBean(String count, String id, String n, String pinyinFull,
+            String pinyinShort) {
+        this.count = count;
+        this.id = id;
+        this.n = n;
+        this.pinyinFull = pinyinFull;
+        this.pinyinShort = pinyinShort;
     }
-
-    public void setCount(int count) {
+    @Generated(hash = 759316132)
+    public CityInfoBean() {
+    }
+    public String getCount() {
+        return this.count;
+    }
+    public void setCount(String count) {
         this.count = count;
     }
-
-    public int getId() {
-        return id;
+    public String getId() {
+        return this.id;
     }
-
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
-
     public String getN() {
-        return n;
+        return this.n;
     }
-
     public void setN(String n) {
         this.n = n;
     }
-
     public String getPinyinFull() {
-        return pinyinFull;
+        return this.pinyinFull;
     }
-
     public void setPinyinFull(String pinyinFull) {
         this.pinyinFull = pinyinFull;
     }
-
     public String getPinyinShort() {
-        return pinyinShort;
+        return this.pinyinShort;
     }
-
     public void setPinyinShort(String pinyinShort) {
         this.pinyinShort = pinyinShort;
     }
+
 }

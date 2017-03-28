@@ -19,10 +19,24 @@
         android:paddingStart="@dimen/dip_thirty"
         android:paddingEnd="@dimen/dip_thirty">
 
+        <yyl.yincloud.widget.LoginButton
+            android:id="@+id/btn_login"
+            android:transitionName="loginFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dip_thirty"
+            android:layout_marginTop="@dimen/dip_fifty"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_eighteen"/>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/btn_login">
+            android:layout_above="@id/btn_login">
 
             <LinearLayout
                 android:id="@+id/ll_login_account"
@@ -88,19 +102,6 @@
                 android:background="@color/translucent_white"/>
         </RelativeLayout>
 
-        <yyl.yincloud.widget.OkButton
-            android:id="@+id/btn_login"
-            android:transitionName="loginFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dip_thirty"
-            android:layout_marginTop="@dimen/dip_fifty"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:text="登录"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_eighteen"/>
     </RelativeLayout>
 
     <View

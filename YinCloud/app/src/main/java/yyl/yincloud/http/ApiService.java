@@ -20,19 +20,19 @@ public interface ApiService {
 
     //正在售票
     @GET("PageSubArea/HotPlayMovies.api")
-    Observable<JSONObject> findSellingTickets(@Query("locationId") int locationId);
+    Observable<JSONObject> findSellingTickets(@Query("locationId") String locationId);
 
     //正在热映
     @GET("Showtime/LocationMovies.api")
-    Observable<JSONObject> findIsRehearsing(@Query("locationId") int locationId);
+    Observable<JSONObject> findIsRehearsing(@Query("locationId") String locationId);
 
     //即将上映
     @GET("Movie/MovieComingNew.api")
-    Observable<JSONObject> findComingSoon(@Query("locationId") int locationId);
+    Observable<JSONObject> findComingSoon(@Query("locationId") String locationId);
 
     //影片详情 使用TICKET_URL
     @GET("detail.api")
-    Observable<JSONObject> findMovieDetail(@Query("locationId") int locationId,
+    Observable<JSONObject> findMovieDetail(@Query("locationId") String locationId,
                                            @Query("movieId") String movieId);
 
     //演员列表

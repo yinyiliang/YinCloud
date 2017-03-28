@@ -4,8 +4,12 @@ import android.app.Application;
 import android.content.Context;
 
 import com.aitangba.swipeback.ActivityLifecycleHelper;
+import com.jackie.greendao.DaoMaster;
+import com.jackie.greendao.DaoSession;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.greendao.database.Database;
 
 import yyl.yincloud.BuildConfig;
 import yyl.yincloud.exception.ExceptionHandler;
@@ -16,13 +20,15 @@ import yyl.yincloud.exception.ExceptionHandler;
 
 public class BaseApplication extends Application {
 
-    private Context mContext;
+    public static Context mContext;
+
+    private DaoSession daoSession;
 
     @Override
     public void onCreate() {
         super.onCreate();
         registerActivityLifecycleCallbacks(ActivityLifecycleHelper.build());
-        this.mContext = this;
+        mContext = getApplicationContext();
 
         // 全局异常处理
         ExceptionHandler.getInstance().init(mContext);
@@ -32,9 +38,14 @@ public class BaseApplication extends Application {
         } else {
             Logger.init("YIN").logLevel(LogLevel.NONE);
         }
+
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "city-db");
+        Database db = helper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
     }
 
-    public Context getContext() {
-        return mContext;
+    public DaoSession getDaoSession() {
+        return daoSession;
     }
+
 }
